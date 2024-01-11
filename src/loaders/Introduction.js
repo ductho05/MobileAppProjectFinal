@@ -10,14 +10,14 @@ function Introduction() {
                 flexDirection: 'row'
             }}>
                 <Text style={tw`flex text-[16px] text-[#000]`}>Họ tên: </Text>
-                <Text style={tw`flex text-[14px] text-[#333]`}>Nịnh Đức Thọ</Text>
+                <Text style={tw`flex text-[14px] text-[#333]`}>Phung Thi Thuy Trang</Text>
             </View>
             <View style={{
                 flex: 1,
                 flexDirection: 'row'
             }}>
                 <Text style={tw`flex text-[16px] text-[#000]`}>Mssv: </Text>
-                <Text style={tw`flex text-[14px] text-[#333]`}>20110730</Text>
+                <Text style={tw`flex text-[14px] text-[#333]`}>20110313</Text>
             </View>
             <View style={{
                 flex: 1,
@@ -25,7 +25,7 @@ function Introduction() {
             }}>
                 <Text style={tw`flex text-[16px] text-[#000]`}>Email: </Text>
                 <Text style={tw`flex text-[14px] text-[#333]`}>
-                    ductho23pro@gmail.com
+                    20110313@student.hcmute.edu.vn
                 </Text>
             </View>
         </View>

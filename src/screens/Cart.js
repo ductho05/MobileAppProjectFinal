@@ -1,12 +1,12 @@
 import React from 'react'
 import { Text, View } from 'react-native'
 
-function Setting() {
+function Cart() {
     return (
         <View>
-            <Text style={{ fontSize: 40, textAlign: 'center' }}>Setting</Text>
+            <Text style={{ fontSize: 40, textAlign: 'center' }}>Cart</Text>
         </View>
     )
 }
 
-export default Setting
+export default Cart

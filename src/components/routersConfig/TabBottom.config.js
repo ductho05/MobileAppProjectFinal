@@ -1,7 +1,7 @@
-import * as React from 'react'
 import Home from '../../screens/Home';
-import Detail from '../../screens/Detail';
-import Setting from '../../screens/Setting';
+import Notification from '../../screens/Notification';
+import Cart from '../../screens/Cart';
+import Account from '../../screens/Account';
 
 const TabBottomRouters = [
     {
@@ -11,16 +11,22 @@ const TabBottomRouters = [
         iconName: 'home',
     },
     {
-        screen: Detail,
-        label: 'Chi tiết',
-        tabIconLabel: 'info',
-        iconName: 'info-circle',
+        screen: Account,
+        label: 'Tài khoản',
+        tabIconLabel: 'user',
+        iconName: 'user',
     },
     {
-        screen: Setting,
-        label: 'Cài đặt',
-        tabIconLabel: 'tools',
-        iconName: 'tools',
+        screen: Notification,
+        label: 'Thông báo',
+        tabIconLabel: 'info',
+        iconName: 'bell',
+    },
+    {
+        screen: Cart,
+        label: 'Giỏ hàng',
+        tabIconLabel: 'cart-plus',
+        iconName: 'cart-plus'
     }
 ]
 

@@ -38,7 +38,7 @@ function Register({ navigation }) {
         navigation.navigate('ForgotPassword')
     }
 
-    const onSubmit = (data) => {
+    const handleRegister = (data) => {
 
         setLoading(true)
         axios.post(`${API_URL}/auth/register`, {
@@ -78,6 +78,10 @@ function Register({ navigation }) {
             })
 
     }
+
+    const password = watch('password');
+    const retypePassword = watch('retypePassword');
+    const passwordsMatch = password === retypePassword;
 
     return (
         <>
@@ -160,12 +164,12 @@ function Register({ navigation }) {
 
                                 )}
                             />
-                            {/* {
-                                errors.email &&
+                            {
+                                errors.firstName &&
                                 <Text style={tw`mt-[10px] text-red-500`}>
-                                    Vui lòng nhập đúng định dạng email
+                                    Vui lòng nhập họ tên
                                 </Text>
-                            } */}
+                            }
 
                         </View>
 
@@ -196,12 +200,12 @@ function Register({ navigation }) {
 
                                 )}
                             />
-                            {/* {
-                                errors.email &&
+                            {
+                                errors.lastName &&
                                 <Text style={tw`mt-[10px] text-red-500`}>
-                                    Vui lòng nhập đúng định dạng email
+                                    Vui lòng tên
                                 </Text>
-                            } */}
+                            }
 
                         </View>
 
@@ -233,12 +237,12 @@ function Register({ navigation }) {
 
                                 )}
                             />
-                            {/* {
-                                errors.email &&
+                            {
+                                errors.password &&
                                 <Text style={tw`mt-[10px] text-red-500`}>
-                                    Vui lòng nhập đúng định dạng email
+                                    Vui lòng nhập mật khẩu
                                 </Text>
-                            } */}
+                            }
 
                         </View>
                         
@@ -260,14 +264,16 @@ function Register({ navigation }) {
                                             spellCheck={false}
                                             onBlur={onBlur}
                                             placeholder='Nhập lại mật khẩu'
-                                            onChangeText={(value) => onChange(value)}
+                                            onChangeText={(value) => {
+                                                 onChange(value);
+                                            }}
                                             value={value}
                                             style={tw`ml-[10px] flex-1`}
                                             placeholderTextColor="#999"
                                             secureTextEntry={!isShowPassword}
                                         />
                                         {
-                                            watch('password')
+                                            password
                                                 ?
                                                 <View>
                                                     {
@@ -297,16 +303,17 @@ function Register({ navigation }) {
                                 )}
                             />
 
+                            {!passwordsMatch && <Text style={tw`mt-[10px] text-red-500`}>Mật khẩu không khớp</Text>}
                             {
-                                errors.password &&
+                                errors.retypePassword &&
                                 <Text style={tw`mt-[10px] text-red-500`}>
-                                    Vui lòng nhập mật khẩu
+                                    Vui lòng nhập lại mật khẩu
                                 </Text>
                             }
                             <View style={tw`mt-[16px] items-end`}>
                                 <Text onPress={handleToForgotPassword} style={tw`font-bold`}>Quên mật khẩu</Text>
                             </View>
-                            <TouchableOpacity onPress={handleSubmit(onSubmit)} style={tw`mt-[20px] mx-[30px]`}>
+                            <TouchableOpacity onPress={handleSubmit(handleRegister)} style={tw`mt-[20px] mx-[30px]`}>
                                 <LinearGradient
                                     colors={['#FA7B05', '#FA7B05', '#FA7B05', '#FA4005']}
                                     start={{ x: 0, y: 0 }}

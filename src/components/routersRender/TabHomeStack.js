@@ -4,10 +4,20 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import TabBottom from './TabBottom';
 import Login from '../../screens/auth/Login';
 import tabHomeStackRoutes from '../routersConfig/TabHomeStack.config';
+import { useDispatch } from 'react-redux'
+import { fetchInitialData } from '../../stores/asyncAction';
 
 const Stack = createNativeStackNavigator();
 
 function TabHomeStack() {
+
+    const dispatch = useDispatch()
+
+    React.useEffect(() => {
+
+        dispatch(fetchInitialData())
+    }, [])
+
     return (
         <NavigationContainer>
             <Stack.Navigator

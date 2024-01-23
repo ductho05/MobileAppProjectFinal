@@ -243,7 +243,7 @@ function Login({ navigation }) {
 const styles = StyleSheet.create({
     image: {
         height: '43.1%',
-        objectFit: 'contain'
+        objectFit: 'cover'
     },
     title: {
         fontFamily: 'InknutAntiqua-Bold',

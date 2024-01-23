@@ -1,6 +1,7 @@
 import FogotPassword from "../../screens/auth/FogotPassword"
 import Login from "../../screens/auth/Login"
 import Register from "../../screens/auth/Register"
+import SearchProduct from "../../screens/SearchProduct"
 import TabBottom from "../routersRender/TabBottom"
 
 const tabHomeStackRoutes = [
@@ -19,6 +20,10 @@ const tabHomeStackRoutes = [
     {
         name: 'ForgotPassword',
         component: FogotPassword
+    },
+    {
+        name: 'search',
+        component: SearchProduct
     }
 ]
 

@@ -1,7 +1,7 @@
 import React from 'react'
 import TabHomeStack from './components/routersRender/TabHomeStack'
 import Introduction from './loaders/Introduction'
-import { useSelector, useDispatch } from 'react-redux'
+
 
 function Main() {
 

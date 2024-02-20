@@ -16,6 +16,7 @@ import LinearGradient from 'react-native-linear-gradient'
 function Register({ navigation }) {
 
     const [isShowPassword, setIsShowPassword] = React.useState(false)
+    const [isShowTypePassword, setIsShowTypePassword] = React.useState(false)
     const [loading, setLoading] = React.useState(false)
     const dispatch = useDispatch()
 
@@ -32,6 +33,10 @@ function Register({ navigation }) {
 
     const handleTogglePassword = () => {
         setIsShowPassword(prev => !prev)
+    }
+
+    const handleToggleTypePassword = () => {
+        setIsShowTypePassword(prev => !prev)
     }
 
     const handleToForgotPassword = () => {
@@ -116,7 +121,7 @@ function Register({ navigation }) {
                                         />
                                         <TextInput
                                             spellCheck={false}
-                                            placeholder='Nhập địa chỉ email'
+                                            placeholder='Địa chỉ email'
                                             onBlur={onBlur}
                                             onChangeText={value => onChange(value)}
                                             value={value}
@@ -147,13 +152,13 @@ function Register({ navigation }) {
                                 render={({ field: { onChange, onBlur, value } }) => (
                                     <View style={tw`flex-row items-center border ${errors.password ? "border-red-500" : "border-[#999]"} rounded-[6px] text-[#333] w-full px-[10px]`}>
                                         <IconFontAwesome
-                                            name="envelope"
+                                            name="user"
                                             size={16}
                                             color={`${PRIMARY_COLOR}`}
                                         />
                                         <TextInput
                                             spellCheck={false}
-                                            placeholder='Nhập họ tên đệm'
+                                            placeholder='Họ'
                                             onBlur={onBlur}
                                             onChangeText={value => onChange(value)}
                                             value={value}
@@ -167,7 +172,7 @@ function Register({ navigation }) {
                             {
                                 errors.firstName &&
                                 <Text style={tw`mt-[10px] text-red-500`}>
-                                    Vui lòng nhập họ tên
+                                    Vui lòng nhập họ
                                 </Text>
                             }
 
@@ -183,13 +188,13 @@ function Register({ navigation }) {
                                 render={({ field: { onChange, onBlur, value } }) => (
                                     <View style={tw`flex-row items-center border ${errors.password ? "border-red-500" : "border-[#999]"} rounded-[6px] text-[#333] w-full px-[10px]`}>
                                         <IconFontAwesome
-                                            name="envelope"
+                                            name="user"
                                             size={16}
                                             color={`${PRIMARY_COLOR}`}
                                         />
                                         <TextInput
                                             spellCheck={false}
-                                            placeholder='Nhập tên'
+                                            placeholder='Tên'
                                             onBlur={onBlur}
                                             onChangeText={value => onChange(value)}
                                             value={value}
@@ -225,14 +230,42 @@ function Register({ navigation }) {
                                         />
                                         <TextInput
                                             spellCheck={false}
-                                            placeholder='Nhập mật khẩu'
                                             onBlur={onBlur}
-                                            onChangeText={value => onChange(value)}
+                                            placeholder='Nhập lại mật khẩu'
+                                            onChangeText={(value) => {
+                                                 onChange(value);
+                                            }}
                                             value={value}
-                                            style={tw`ml-[10px]`}
+                                            style={tw`ml-[10px] flex-1`}
                                             placeholderTextColor="#999"
                                             secureTextEntry={!isShowPassword}
                                         />
+                                        {
+                                            password
+                                            ?
+                                            <View>
+                                                {
+                                                    isShowPassword
+                                                        ?
+                                                        <TouchableOpacity onPress={handleTogglePassword}>
+                                                            <IconFontAwesome
+                                                                name={isShowPassword ? "eye" : "eye-slash"}
+                                                                size={18}
+                                                                color={`${PRIMARY_COLOR}`}
+                                                            />
+                                                        </TouchableOpacity>
+                                                        :
+                                                        <TouchableOpacity onPress={handleTogglePassword}>
+                                                            <IconFontAwesome
+                                                                name="eye-slash"
+                                                                size={18}
+                                                                color={`${PRIMARY_COLOR}`}
+                                                            />
+                                                        </TouchableOpacity>
+                                                }
+                                            </View>
+                                            : <View></View>
+                                        }
                                     </View>
 
                                 )}
@@ -240,7 +273,7 @@ function Register({ navigation }) {
                             {
                                 errors.password &&
                                 <Text style={tw`mt-[10px] text-red-500`}>
-                                    Vui lòng nhập mật khẩu
+                                    Nhập mật khẩu có tối thiểu 6 ký tự bao gồm số, chữ cái và dấu chấm câu (như ! và &)
                                 </Text>
                             }
 
@@ -270,16 +303,16 @@ function Register({ navigation }) {
                                             value={value}
                                             style={tw`ml-[10px] flex-1`}
                                             placeholderTextColor="#999"
-                                            secureTextEntry={!isShowPassword}
+                                            secureTextEntry={!isShowTypePassword}
                                         />
                                         {
-                                            password
+                                            retypePassword
                                                 ?
                                                 <View>
                                                     {
-                                                        isShowPassword
+                                                        isShowTypePassword
                                                             ?
-                                                            <TouchableOpacity onPress={handleTogglePassword}>
+                                                            <TouchableOpacity onPress={handleToggleTypePassword}>
                                                                 <IconFontAwesome
                                                                     name="eye"
                                                                     size={18}
@@ -287,7 +320,7 @@ function Register({ navigation }) {
                                                                 />
                                                             </TouchableOpacity>
                                                             :
-                                                            <TouchableOpacity onPress={handleTogglePassword}>
+                                                            <TouchableOpacity onPress={handleToggleTypePassword}>
                                                                 <IconFontAwesome
                                                                     name="eye-slash"
                                                                     size={18}
@@ -310,9 +343,9 @@ function Register({ navigation }) {
                                     Vui lòng nhập lại mật khẩu
                                 </Text>
                             }
-                            <View style={tw`mt-[16px] items-end`}>
+                            {/* <View style={tw`mt-[16px] items-end`}>
                                 <Text onPress={handleToForgotPassword} style={tw`font-bold`}>Quên mật khẩu</Text>
-                            </View>
+                            </View> */}
                             <TouchableOpacity onPress={handleSubmit(handleRegister)} style={tw`mt-[20px] mx-[30px]`}>
                                 <LinearGradient
                                     colors={['#FA7B05', '#FA7B05', '#FA7B05', '#FA4005']}
@@ -320,7 +353,6 @@ function Register({ navigation }) {
                                     end={{ x: 1, y: 0 }}
                                     locations={[0, 0.5, 0.7523, 1]}
                                     style={tw`w-full items-center rounded-[100px] px-[40px] py-[14px]`}
-
                                 >
                                     <Text
                                         style={tw`text-[#fff]`}

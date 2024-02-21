@@ -40,6 +40,7 @@ function Register({ navigation }) {
 
     const handleRegister = (data) => {
 
+        console.log("data: ", data)
         setLoading(true)
         axios.post(`${API_URL}/auth/register`, {
             email: data.email,
@@ -135,14 +136,14 @@ function Register({ navigation }) {
                             }
 
                         </View>
-                        
+
                         <View style={tw`w-full mb-[10px]`}>
                             <Controller
                                 name='firstName'
                                 control={control}
                                 rules={{
                                     required: true,
-                                   
+
                                 }}
                                 render={({ field: { onChange, onBlur, value } }) => (
                                     <View style={tw`flex-row items-center border ${errors.password ? "border-red-500" : "border-[#999]"} rounded-[6px] text-[#333] w-full px-[10px]`}>
@@ -245,7 +246,7 @@ function Register({ navigation }) {
                             }
 
                         </View>
-                        
+
                         <View style={tw`w-full my-[10px]`}>
                             <Controller
                                 name='retypePassword'
@@ -265,7 +266,7 @@ function Register({ navigation }) {
                                             onBlur={onBlur}
                                             placeholder='Nhập lại mật khẩu'
                                             onChangeText={(value) => {
-                                                 onChange(value);
+                                                onChange(value);
                                             }}
                                             value={value}
                                             style={tw`ml-[10px] flex-1`}
@@ -363,7 +364,7 @@ function Register({ navigation }) {
 const styles = StyleSheet.create({
     image: {
         height: '43.1%',
-        objectFit: 'contain'
+        objectFit: 'cover'
     },
     title: {
         fontFamily: 'InknutAntiqua-Bold',

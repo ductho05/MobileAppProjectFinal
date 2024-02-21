@@ -1,6 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { getAllCategoriesApi } from "../apis/categoriesApi";
 import { getMostProductApi, getNewsProductApi } from "../apis/productApi";
+import { getUserApi } from "../apis/usersApi";
 
 export const fetchInitialData = createAsyncThunk(
     'initData/getInitData',
@@ -14,5 +15,15 @@ export const fetchInitialData = createAsyncThunk(
             newProducts: newProducts.data,
             mostProducts: mostProducts.data
         }
+    }
+)
+
+export const fetchUsers = createAsyncThunk(
+    'user/getUser',
+    async () => {
+
+        const user = await getUserApi()
+
+        return user.data
     }
 )

@@ -1,6 +1,7 @@
 import React from 'react'
+import TabHomeStack from './components/routersRender/TabHomeStack'
 import Introduction from './loaders/Introduction'
-import Home from './screens/Home'
+
 
 function Main() {
 
@@ -9,7 +10,7 @@ function Main() {
     React.useEffect(() => {
         setTimeout(() => {
             setIntro(false)
-        }, 10000)
+        }, 5000)
 
         return () => clearTimeout()
     }, [])
@@ -17,7 +18,7 @@ function Main() {
     return (
         <>
             {
-                intro ? <Introduction /> : <Home />
+                intro ? <Introduction /> : <TabHomeStack />
             }
         </>
     )

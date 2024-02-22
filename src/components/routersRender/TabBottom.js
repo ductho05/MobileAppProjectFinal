@@ -1,14 +1,17 @@
 import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import IconFontAwesome from 'react-native-vector-icons/FontAwesome5';
+import IconFontAwesome from 'react-native-vector-icons/FontAwesome';
 import TabBottomRouters from '../routersConfig/TabBottom.config';
+import { PRIMARY_COLOR } from '../../styles/colors.global';
+import { Text } from 'react-native';
+import tw from 'twrnc'
 
 const Tab = createBottomTabNavigator()
 
 function TabBottom() {
     return (
         <Tab.Navigator
-            initialRouterName="Trang chủ"
+            initialRouterName="info"
             screenOptions={{ headerShown: false }}
         >
             {
@@ -34,7 +37,7 @@ function TabBottom() {
                                     fontWeight: 'bold'
                                 },
                                 tabBarStyle: {
-                                    height: 60,
+                                    height: 54,
                                     paddingBottom: 5
                                 },
 
@@ -43,10 +46,18 @@ function TabBottom() {
                                         <IconFontAwesome
                                             name={iconName}
                                             size={20}
+
                                             color={
-                                                focused ? '#007aff' : '#000'
+                                                focused ? `${PRIMARY_COLOR}` : '#333'
                                             }
                                         />
+                                    )
+                                },
+                                tabBarLabel: ({ focused }) => {
+                                    return (
+                                        <Text style={tw`${focused ? 'text-[#FA7B05]' : 'text-[#333]'}`}>
+                                            {label}
+                                        </Text>
                                     )
                                 }
                             }}

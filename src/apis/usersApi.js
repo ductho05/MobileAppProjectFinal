@@ -13,3 +13,24 @@ export const getUserApi = async (token) => {
 
     return response
 }
+
+export const activeUserApi = async (email) => {
+
+    const response = await axios.post(`${API_URL}/auth/active-user?email=${email}`)
+
+    return response
+}
+
+export const sendOTPApi = async (email) => {
+
+    const response = await axios.post(`${API_URL}/auth/send-otp?email=${email}`)
+
+    return response
+}
+
+export const forgotPasswordApi = async (data) => {
+
+    const response = await axios.post(`${API_URL}/auth/forgot-password`, data)
+
+    return response
+}

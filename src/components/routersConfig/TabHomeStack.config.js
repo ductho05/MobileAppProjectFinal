@@ -1,3 +1,4 @@
+import AuthenticateOTP from "../../screens/auth/AuthenticateOTP"
 import FogotPassword from "../../screens/auth/FogotPassword"
 import Login from "../../screens/auth/Login"
 import Register from "../../screens/auth/Register"
@@ -24,6 +25,10 @@ const tabHomeStackRoutes = [
     {
         name: 'search',
         component: SearchProduct
+    },
+    {
+        name: 'AuthenticateOTP',
+        component: AuthenticateOTP
     }
 ]
 

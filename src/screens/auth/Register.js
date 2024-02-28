@@ -16,6 +16,7 @@ import LinearGradient from 'react-native-linear-gradient'
 function Register({ navigation }) {
 
     const [isShowPassword, setIsShowPassword] = React.useState(false)
+    const [isShowConfirmPassword, setIsShowConfirmPassword] = React.useState(false)
     const [loading, setLoading] = React.useState(false)
     const dispatch = useDispatch()
 
@@ -34,20 +35,24 @@ function Register({ navigation }) {
         setIsShowPassword(prev => !prev)
     }
 
+    const handleToggleConfirmPassword = () => {
+        setIsShowConfirmPassword(prev => !prev)
+    }
+
     const handleToForgotPassword = () => {
+
         navigation.navigate('ForgotPassword')
     }
 
     const handleRegister = (data) => {
 
-        console.log("data: ", data)
         setLoading(true)
         axios.post(`${API_URL}/auth/register`, {
             email: data.email,
             password: data.password,
-            firstName: data.firstName,
-            lastName: data.lastName,
-            retypePassword: data.retypePassword,
+            firstname: data.firstname,
+            lastname: data.lastname,
+            confirmPassword: data.confirmPassword,
         })
             .then(response => {
 
@@ -59,15 +64,11 @@ function Register({ navigation }) {
                         text1: `Lỗi, ${response.data.message}`
                     })
                 } else {
-                    dispatch(login(response.data.token))
-
-                    Toast.show({
-                        type: 'success',
-                        text1: 'Đăng nhập tài khoản thành công!'
+                    navigation.navigate('AuthenticateOTP', {
+                        email: data.email,
+                        verifyOTP: response.data.data.otp,
+                        forgotPassword: false
                     })
-                    setTimeout(() => {
-                        navigation.navigate('TabBottom')
-                    }, 500)
                 }
             })
             .catch(err => {
@@ -81,7 +82,7 @@ function Register({ navigation }) {
     }
 
     const password = watch('password');
-    const retypePassword = watch('retypePassword');
+    const retypePassword = watch('confirmPassword');
     const passwordsMatch = password === retypePassword;
 
     return (
@@ -139,7 +140,7 @@ function Register({ navigation }) {
 
                         <View style={tw`w-full mb-[10px]`}>
                             <Controller
-                                name='firstName'
+                                name='firstname'
                                 control={control}
                                 rules={{
                                     required: true,
@@ -166,7 +167,7 @@ function Register({ navigation }) {
                                 )}
                             />
                             {
-                                errors.firstName &&
+                                errors.firstname &&
                                 <Text style={tw`mt-[10px] text-red-500`}>
                                     Vui lòng nhập họ tên
                                 </Text>
@@ -176,7 +177,7 @@ function Register({ navigation }) {
 
                         <View style={tw`w-full mb-[10px]`}>
                             <Controller
-                                name='lastName'
+                                name='lastname'
                                 control={control}
                                 rules={{
                                     required: true,
@@ -202,9 +203,9 @@ function Register({ navigation }) {
                                 )}
                             />
                             {
-                                errors.lastName &&
+                                errors.lastname &&
                                 <Text style={tw`mt-[10px] text-red-500`}>
-                                    Vui lòng tên
+                                    Vui lòng nhập tên
                                 </Text>
                             }
 
@@ -229,45 +230,6 @@ function Register({ navigation }) {
                                             placeholder='Nhập mật khẩu'
                                             onBlur={onBlur}
                                             onChangeText={value => onChange(value)}
-                                            value={value}
-                                            style={tw`ml-[10px]`}
-                                            placeholderTextColor="#999"
-                                            secureTextEntry={!isShowPassword}
-                                        />
-                                    </View>
-
-                                )}
-                            />
-                            {
-                                errors.password &&
-                                <Text style={tw`mt-[10px] text-red-500`}>
-                                    Vui lòng nhập mật khẩu
-                                </Text>
-                            }
-
-                        </View>
-
-                        <View style={tw`w-full my-[10px]`}>
-                            <Controller
-                                name='retypePassword'
-                                control={control}
-                                rules={{
-                                    required: true
-                                }}
-                                render={({ field: { onChange, onBlur, value } }) => (
-                                    <View style={tw`flex-row items-center border ${errors.password ? "border-red-500" : "border-[#999]"} rounded-[6px] text-[#333] w-full px-[10px]`}>
-                                        <IconFontAwesome
-                                            name="lock"
-                                            size={22}
-                                            color={`${PRIMARY_COLOR}`}
-                                        />
-                                        <TextInput
-                                            spellCheck={false}
-                                            onBlur={onBlur}
-                                            placeholder='Nhập lại mật khẩu'
-                                            onChangeText={(value) => {
-                                                onChange(value);
-                                            }}
                                             value={value}
                                             style={tw`ml-[10px] flex-1`}
                                             placeholderTextColor="#999"
@@ -301,12 +263,78 @@ function Register({ navigation }) {
 
                                         }
                                     </View>
+
+                                )}
+                            />
+                            {
+                                errors.password &&
+                                <Text style={tw`mt-[10px] text-red-500`}>
+                                    Vui lòng nhập mật khẩu
+                                </Text>
+                            }
+
+                        </View>
+
+                        <View style={tw`w-full my-[10px]`}>
+                            <Controller
+                                name='confirmPassword'
+                                control={control}
+                                rules={{
+                                    required: true
+                                }}
+                                render={({ field: { onChange, onBlur, value } }) => (
+                                    <View style={tw`flex-row items-center border ${errors.confirmPassword ? "border-red-500" : "border-[#999]"} rounded-[6px] text-[#333] w-full px-[10px]`}>
+                                        <IconFontAwesome
+                                            name="lock"
+                                            size={22}
+                                            color={`${PRIMARY_COLOR}`}
+                                        />
+                                        <TextInput
+                                            spellCheck={false}
+                                            onBlur={onBlur}
+                                            placeholder='Nhập lại mật khẩu'
+                                            onChangeText={(value) => {
+                                                onChange(value);
+                                            }}
+                                            value={value}
+                                            style={tw`ml-[10px] flex-1`}
+                                            placeholderTextColor="#999"
+                                            secureTextEntry={!isShowConfirmPassword}
+                                        />
+                                        {
+                                            watch('confirmPassword')
+                                                ?
+                                                <View>
+                                                    {
+                                                        isShowConfirmPassword
+                                                            ?
+                                                            <TouchableOpacity onPress={handleToggleConfirmPassword}>
+                                                                <IconFontAwesome
+                                                                    name="eye"
+                                                                    size={18}
+                                                                    color={`${PRIMARY_COLOR}`}
+                                                                />
+                                                            </TouchableOpacity>
+                                                            :
+                                                            <TouchableOpacity onPress={handleToggleConfirmPassword}>
+                                                                <IconFontAwesome
+                                                                    name="eye-slash"
+                                                                    size={18}
+                                                                    color={`${PRIMARY_COLOR}`}
+                                                                />
+                                                            </TouchableOpacity>
+                                                    }
+                                                </View>
+                                                : <View></View>
+
+                                        }
+                                    </View>
                                 )}
                             />
 
                             {!passwordsMatch && <Text style={tw`mt-[10px] text-red-500`}>Mật khẩu không khớp</Text>}
                             {
-                                errors.retypePassword &&
+                                errors.confirmPassword &&
                                 <Text style={tw`mt-[10px] text-red-500`}>
                                     Vui lòng nhập lại mật khẩu
                                 </Text>

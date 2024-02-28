@@ -22,6 +22,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignContent: 'center',
         backgroundColor: 'rgba(0, 0, 0, 0.3)',
-        zIndex: 1
+        zIndex: 2
     }
 })

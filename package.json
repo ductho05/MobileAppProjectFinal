@@ -27,6 +27,7 @@
     "react-native-check-box": "^2.1.7",
     "react-native-gesture-handler": "^2.14.1",
     "react-native-linear-gradient": "^2.8.3",
+    "react-native-otp-textinput": "^1.1.5",
     "react-native-ratings": "^8.1.0",
     "react-native-safe-area-context": "^3.4.1",
     "react-native-screens": "^3.29.0",

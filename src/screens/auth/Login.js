@@ -12,12 +12,16 @@ import Loading from '../../components/Loading'
 import { PRIMARY_COLOR } from '../../styles/colors.global'
 import IconFontAwesome from 'react-native-vector-icons/FontAwesome';
 import LinearGradient from 'react-native-linear-gradient'
+import Dialog from '../../components/Dialog'
+import { sendOTPApi } from '../../apis/usersApi'
 
 function Login({ navigation }) {
 
     const [isShowPassword, setIsShowPassword] = React.useState(false)
     const [loading, setLoading] = React.useState(false)
     const dispatch = useDispatch()
+    const [isShowDialog, setIsShowDialog] = React.useState(false)
+    const [forgotPasswordEmail, setForgotPasswordEmail] = React.useState()
 
     const {
         control,
@@ -25,6 +29,10 @@ function Login({ navigation }) {
         watch,
         formState: { errors },
     } = useForm()
+
+    const handleChangeEmail = (text) => {
+        setForgotPasswordEmail(text)
+    }
 
     const handleToRegister = () => {
         navigation.navigate('Register')
@@ -34,8 +42,43 @@ function Login({ navigation }) {
         setIsShowPassword(prev => !prev)
     }
 
-    const handleToForgotPassword = () => {
-        navigation.navigate('ForgotPassword')
+    const handleToForgotPassword = async () => {
+
+        const regexEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
+        if (forgotPasswordEmail || forgotPasswordEmail != '') {
+
+            const isMatch = regexEmail.test(forgotPasswordEmail)
+
+            if (isMatch) {
+
+                setLoading(true)
+                const response = await sendOTPApi(forgotPasswordEmail)
+                setLoading(false)
+
+                if (response.status === 200) {
+
+                    setIsShowDialog(false)
+                    navigation.navigate('AuthenticateOTP', {
+                        email: forgotPasswordEmail,
+                        verifyOTP: response.data.otp,
+                        forgotPassword: true
+                    })
+                }
+            } else {
+
+                Toast.show({
+                    type: 'error',
+                    text1: 'Email không đúng định dạng'
+                })
+            }
+        } else {
+
+            Toast.show({
+                type: 'error',
+                text1: 'Vui lòng nhập email'
+            })
+        }
+
     }
 
     const onSubmit = (data) => {
@@ -81,6 +124,52 @@ function Login({ navigation }) {
             {
 
                 loading && <Loading />
+            }
+            {
+                isShowDialog &&
+                <Dialog>
+                    <View style={[tw`bg-white w-[90%] p-[20px] rounded-[6px] items-center`]}>
+                        <Text style={tw`text-[#333] font-bold text-center`}>Vui lòng nhập địa chỉ email để lấy lại mật khẩu</Text>
+                        <TextInput
+                            spellCheck={false}
+                            placeholder='Nhập địa chỉ email'
+                            style={tw`border border-[#999] my-[20px] w-full rounded-[6px] px-[10px]`}
+                            placeholderTextColor="#999"
+                            onChangeText={handleChangeEmail}
+                            value={forgotPasswordEmail}
+                        />
+                        <View style={tw`flex-row mt-[20px]`}>
+                            <TouchableOpacity onPress={handleToForgotPassword} style={tw`mx-[30px]`}>
+                                <LinearGradient
+                                    colors={['#FA7B05', '#FA7B05', '#FA7B05', '#FA4005']}
+                                    start={{ x: 0, y: 0 }}
+                                    end={{ x: 1, y: 0 }}
+                                    locations={[0, 0.5, 0.7523, 1]}
+                                    style={tw`items-center rounded-[100px] px-[14px] py-[6px]`}
+
+                                >
+                                    <Text
+                                        style={tw`text-[#fff]`}
+                                    >
+                                        Xác nhận
+                                    </Text>
+                                </LinearGradient >
+                            </TouchableOpacity>
+                            <TouchableOpacity style={tw`mx-[30px]`} onPress={() => setIsShowDialog(false)}>
+                                <View
+                                    style={tw`items-center rounded-[100px] px-[14px] py-[4px] border border-[#666]`}
+
+                                >
+                                    <Text
+                                        style={tw`text-[#333]`}
+                                    >
+                                        Hủy
+                                    </Text>
+                                </View>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </Dialog>
             }
             <View style={tw`flex-1 `}>
                 <Image
@@ -191,7 +280,7 @@ function Login({ navigation }) {
                                 </Text>
                             }
                             <View style={tw`mt-[16px] items-end`}>
-                                <Text onPress={handleToForgotPassword} style={tw`font-bold`}>Quên mật khẩu</Text>
+                                <Text onPress={() => setIsShowDialog(true)} style={tw`font-bold`}>Quên mật khẩu</Text>
                             </View>
                             <TouchableOpacity onPress={handleSubmit(onSubmit)} style={tw`mt-[20px] mx-[30px]`}>
                                 <LinearGradient

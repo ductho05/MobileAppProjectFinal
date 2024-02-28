@@ -7,10 +7,14 @@ import { Controller, useForm } from 'react-hook-form'
 import tw from 'twrnc'
 import LinearGradient from 'react-native-linear-gradient'
 import IconFontAwesome from 'react-native-vector-icons/FontAwesome';
+import { forgotPasswordApi } from '../../apis/usersApi'
+import Toast from 'react-native-toast-message'
 
-const FogotPassword = ({ navigation }) => {
+const FogotPassword = ({ route, navigation }) => {
 
+    const { email } = route?.params
     const [isShowPassword, setIsShowPassword] = React.useState(false)
+    const [isShowConfirmPassword, setIsShowConfirmPassword] = React.useState(false)
     const [loading, setLoading] = React.useState(false)
     const dispatch = useDispatch()
 
@@ -25,15 +29,42 @@ const FogotPassword = ({ navigation }) => {
         setIsShowPassword(prev => !prev)
     }
 
+    const handleToggleConfirmPassword = () => {
+        setIsShowConfirmPassword(prev => !prev)
+    }
+
     const handleBackToLogin = () => {
         navigation.goBack()
     }
 
-    const onSubmit = (data) => {
+    const onSubmit = async (data) => {
 
-        console.log(data)
+        setLoading(true)
+        const response = await forgotPasswordApi({
+            email,
+            newPassword: data.password
+        })
+        setLoading(false)
+
+        if (response.status === 200) {
+
+            Toast.show({
+                type: 'success',
+                text1: 'Đổi mật khẩu thành công!'
+            })
+            navigation.navigate('Login')
+        } else {
+            Toast.show({
+                type: 'error',
+                text1: 'Có lỗi xảy ra. Vui lòng thử lại'
+            })
+        }
 
     }
+
+    const password = watch('password');
+    const retypePassword = watch('confirmPassword');
+    const passwordsMatch = password === retypePassword;
 
     return (
         <>
@@ -48,47 +79,10 @@ const FogotPassword = ({ navigation }) => {
                 />
                 <ScrollView style={[StyleSheet.absoluteFill, styles.box, tw`w-full flex-1 bg-white top-[34%] rounded-t-[24px]`]}>
                     <View style={tw`w-full my-[10px] flex items-center`}>
-                        <Text style={[styles.title, tw`text-[2rem]`]}>Quên mật khẩu</Text>
+                        <Text style={[styles.title, tw`text-[2rem]`]}>Mật khẩu mới</Text>
                     </View>
                     <View style={tw`px-[20px]`}>
                         <View style={tw`w-full mb-[10px]`}>
-                            <Controller
-                                name='email'
-                                control={control}
-                                rules={{
-                                    required: true,
-                                    pattern: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
-                                }}
-                                render={({ field: { onChange, onBlur, value } }) => (
-                                    <View style={tw`flex-row items-center border ${errors.password ? "border-red-500" : "border-[#999]"} rounded-[6px] text-[#333] w-full px-[10px]`}>
-                                        <IconFontAwesome
-                                            name="envelope"
-                                            size={16}
-                                            color={`${PRIMARY_COLOR}`}
-                                        />
-                                        <TextInput
-                                            spellCheck={false}
-                                            placeholder='Nhập địa chỉ email'
-                                            onBlur={onBlur}
-                                            onChangeText={value => onChange(value)}
-                                            value={value}
-                                            style={tw`ml-[10px]`}
-                                            placeholderTextColor="#999"
-                                        />
-                                    </View>
-
-                                )}
-                            />
-                            {
-                                errors.email &&
-                                <Text style={tw`mt-[10px] text-red-500`}>
-                                    Vui lòng nhập đúng định dạng email
-                                </Text>
-                            }
-
-                        </View>
-
-                        <View style={tw`w-full my-[10px]`}>
                             <Controller
                                 name='password'
                                 control={control}
@@ -104,16 +98,16 @@ const FogotPassword = ({ navigation }) => {
                                         />
                                         <TextInput
                                             spellCheck={false}
-                                            onBlur={onBlur}
                                             placeholder='Nhập mật khẩu'
-                                            onChangeText={(value) => onChange(value)}
+                                            onBlur={onBlur}
+                                            onChangeText={value => onChange(value)}
                                             value={value}
                                             style={tw`ml-[10px] flex-1`}
                                             placeholderTextColor="#999"
                                             secureTextEntry={!isShowPassword}
                                         />
                                         {
-                                            watch('password')
+                                            password
                                                 ?
                                                 <View>
                                                     {
@@ -140,13 +134,80 @@ const FogotPassword = ({ navigation }) => {
 
                                         }
                                     </View>
+
                                 )}
                             />
-
                             {
                                 errors.password &&
                                 <Text style={tw`mt-[10px] text-red-500`}>
                                     Vui lòng nhập mật khẩu
+                                </Text>
+                            }
+
+                        </View>
+
+                        <View style={tw`w-full my-[10px]`}>
+                            <Controller
+                                name='confirmPassword'
+                                control={control}
+                                rules={{
+                                    required: true
+                                }}
+                                render={({ field: { onChange, onBlur, value } }) => (
+                                    <View style={tw`flex-row items-center border ${errors.confirmPassword ? "border-red-500" : "border-[#999]"} rounded-[6px] text-[#333] w-full px-[10px]`}>
+                                        <IconFontAwesome
+                                            name="lock"
+                                            size={22}
+                                            color={`${PRIMARY_COLOR}`}
+                                        />
+                                        <TextInput
+                                            spellCheck={false}
+                                            onBlur={onBlur}
+                                            placeholder='Nhập lại mật khẩu'
+                                            onChangeText={(value) => {
+                                                onChange(value);
+                                            }}
+                                            value={value}
+                                            style={tw`ml-[10px] flex-1`}
+                                            placeholderTextColor="#999"
+                                            secureTextEntry={!isShowConfirmPassword}
+                                        />
+                                        {
+                                            watch('confirmPassword')
+                                                ?
+                                                <View>
+                                                    {
+                                                        isShowConfirmPassword
+                                                            ?
+                                                            <TouchableOpacity onPress={handleToggleConfirmPassword}>
+                                                                <IconFontAwesome
+                                                                    name="eye"
+                                                                    size={18}
+                                                                    color={`${PRIMARY_COLOR}`}
+                                                                />
+                                                            </TouchableOpacity>
+                                                            :
+                                                            <TouchableOpacity onPress={handleToggleConfirmPassword}>
+                                                                <IconFontAwesome
+                                                                    name="eye-slash"
+                                                                    size={18}
+                                                                    color={`${PRIMARY_COLOR}`}
+                                                                />
+                                                            </TouchableOpacity>
+                                                    }
+                                                </View>
+                                                : <View></View>
+
+                                        }
+                                    </View>
+                                )}
+                            />
+
+                            {!passwordsMatch && <Text style={tw`mt-[10px] text-red-500`}>Mật khẩu không khớp</Text>}
+                            {
+                                errors.confirmPassword &&
+                                <Text style={tw`mt-[10px] text-red-500`}>
+                                    Vui lòng nhập lại mật khẩu
                                 </Text>
                             }
                             <TouchableOpacity onPress={handleSubmit(onSubmit)} style={tw`mt-[20px] mx-[30px]`}>

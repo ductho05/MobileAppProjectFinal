@@ -2,10 +2,10 @@ import React from 'react'
 import { Text, View } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
 import tw from 'twrnc'
-import { getUser, logout } from '../stores/userSlice'
+import { getUser, logout } from '../../stores/userSlice'
 import Toast from 'react-native-toast-message'
 import axios from 'axios'
-import { API_URL } from '../constant'
+import { API_URL } from '../../constant'
 
 function Account({ navigation }) {
 

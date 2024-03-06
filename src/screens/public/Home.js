@@ -2,9 +2,9 @@ import React from 'react'
 import { FlatList, View } from 'react-native'
 import { useSelector } from 'react-redux';
 import tw from 'twrnc';
-import Categories from '../components/Categories';
-import ProductFrame from '../components/ProductFrame';
-import Search from '../components/Search';
+import Categories from '../../components/Categories';
+import ProductFrame from '../../components/ProductFrame';
+import Search from '../../components/Search';
 
 function Home({ navigation }) {
 

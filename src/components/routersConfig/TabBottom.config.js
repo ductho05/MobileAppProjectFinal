@@ -1,7 +1,7 @@
-import Home from '../../screens/Home';
-import Notification from '../../screens/Notification';
-import Cart from '../../screens/Cart';
-import Account from '../../screens/Account';
+import Home from '../../screens/public/Home';
+import Notification from '../../screens/member/Notification';
+import Cart from '../../screens/member/Cart';
+import Account from '../../screens/member/Account';
 
 const TabBottomRouters = [
     {

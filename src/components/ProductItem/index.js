@@ -1,13 +1,24 @@
-import { View, Text, Image } from 'react-native'
+import { View, Text, Image, TouchableOpacity } from 'react-native'
 import React from 'react'
 import tw from 'twrnc'
 import { PRIMARY_COLOR } from '../../styles/colors.global'
 import numeral from 'numeral'
 import { Rating } from 'react-native-ratings';
+import { useNavigation } from '@react-navigation/native'
 
 const ProductItem = ({ product }) => {
+
+    const navigation = useNavigation()
+
+    const handleToProductDetail = () => {
+
+        navigation.navigate('ProductDetail', {
+            id: product._id
+        })
+    }
+
     return (
-        <View style={tw`w-[160px] m-[10px] p-[10px] bg-white rounded-[12px]`}>
+        <TouchableOpacity onPress={handleToProductDetail} style={tw`w-[160px] m-[10px] p-[10px] bg-white rounded-[12px]`}>
             <Image
                 source={{ uri: `${product.specPicture}` }}
                 style={[tw`w-full h-[160px]`, { objectFit: 'contain' }]}
@@ -33,7 +44,7 @@ const ProductItem = ({ product }) => {
                 />
                 <Text style={tw`ml-[6px]`}>({product.rates})</Text>
             </View>
-        </View>
+        </TouchableOpacity>
     )
 }
 

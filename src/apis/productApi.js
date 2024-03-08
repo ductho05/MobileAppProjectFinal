@@ -23,3 +23,11 @@ export const getMostProductApi = async () => {
 
     return response
 }
+
+export const getProductByIdApi = async (id) => {
+
+    const response = await axios.get(`${API_URL}/product/${id}`)
+
+    return response
+
+}

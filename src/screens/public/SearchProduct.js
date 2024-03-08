@@ -1,10 +1,10 @@
 import { View, Text, TouchableOpacity, FlatList } from 'react-native'
 import React from 'react'
 import tw from 'twrnc'
-import Search from '../components/Search'
+import Search from '../../components/Search'
 import IconFontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useSelector } from 'react-redux';
-import SuggestItem from '../components/SuggestItem';
+import SuggestItem from '../../components/SuggestItem';
 
 const SearchProduct = ({ navigation }) => {
 

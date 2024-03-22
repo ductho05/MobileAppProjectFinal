@@ -33,7 +33,7 @@ const Search = ({ isSearch, navigation }) => {
 
     React.useEffect(() => {
 
-        if (keywords) {
+        if (debounceKeywords) {
             getSearchProduct(debounceKeywords)
         } else {
             dispatch(getSuggest({

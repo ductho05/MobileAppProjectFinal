@@ -5,14 +5,38 @@ import Search from '../../components/Search'
 import IconFontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useSelector } from 'react-redux';
 import SuggestItem from '../../components/SuggestItem';
+import { searchApi } from '../../apis/productApi';
 
 const SearchProduct = ({ navigation }) => {
 
     const { suggestProduct, keywords } = useSelector(state => state.product)
-
+    const { searchedProducts } = useSelector(state => state.product);
+    
     const handleBackToHome = () => {
         navigation.goBack()
     }
+
+    const handleToSearch = () => {
+        dispatch(searchApi(query));
+        navigation.navigate('SearchResult');
+    }
+
+    // const filterProductsByKeyword = (keyword, products) => {
+    //     const keywordWords = keyword.trim().split(' '); 
+    //     const filtered = products.filter(product => {
+    //         return keywordWords.every(word => product.name.toLowerCase().includes(word.toLowerCase()));
+    //     });
+    //     return filtered;
+    // }
+
+    // React.useEffect(() => {
+    //     if (keywords) {
+    //         const filtered = filterProductsByKeyword(keywords, searchedProducts);
+    //         setFilteredProducts(filtered);
+    //     } else {
+    //         setFilteredProducts([]);
+    //     }
+    // }, [keywords]);
 
     return (
         <View style={tw``}>
@@ -24,6 +48,7 @@ const SearchProduct = ({ navigation }) => {
                         color="#333"
                     />
                 </TouchableOpacity>
+                
                 <Search.Search isSearch={true} />
             </View>
             <View style={tw`px-[20px]`}>
@@ -39,11 +64,15 @@ const SearchProduct = ({ navigation }) => {
                                 suggestProduct.length > 0
                                     ?
                                     <FlatList
+                                        horizontal={suggestProduct}
+                                        pagingEnabled
                                         data={suggestProduct}
                                         renderItem={({ item }) => (
                                             <SuggestItem product={item} />
                                         )}
                                         keyExtractor={item => item._id}
+                                        contentContainerStyle={tw`p-4`}
+                                     
                                     />
                                     :
                                     <Text style={tw`mt-[10px]`}>Không tìm thấy kết quả phù hợp</Text>
